@@ -7,34 +7,66 @@ var stringifyJSON = function(obj) {
   // your code goes here
   switch(typeof(obj)) {
   	case 'number':
-  		return obj;
+  		if (obj == NaN || obj == Infinity) {
+  			return 'null';
+  		} else {
+  			return obj + '';
+  		}
   		break;
   	case 'string':
-  		return obj;
+  		return '"' + obj + '"';
   		break;
   	case 'boolean':
-  		return obj;
+  		return obj + '';
   		break;
   	case 'undefined':
-  		return null;
+  		return 'null';
   		break;
   	case 'function':
-  		return null
+  		return 'null';
   		break;
   	case 'symbol':
-  		return null;
+  		return 'null';
   		break;
   	case 'date':
-  		return obj;
+  		return obj + '';
   		break;
-  	case 'NaN':
-  	case 'null':
-  	case 'Infinity':
-  		return null;
-  		break;
+  	// case null:
+  	// 	return 'null';
+  	// 	break;
   	case 'object':
   		if (Array.isArray(obj)) {
   			// Array processing here
+  			let result = '[';
+  			for (var i=0; i < obj.length; i++) {
+  				result += stringifyJSON(obj[i]) + ',';	
+  			}
+  			if (result.charAt(result.length-1) == ',') {				
+  				result = result.slice(0, -1);	
+  			}
+  			return result + ']';
+  		} else if (obj == null) {
+  			return 'null';
+  		} else {
+  			// object processing here
+  			if (Object.keys(obj).length === 0) {
+  				return '{}'
+  			} else {
+  				let result = '{';
+  				for (var key in obj) {
+  					result += stringifyJSON(key) + ':';
+  					if (typeof(obj[key]) == 'number') {
+  						result += obj[key] + ',';
+  					} else {
+  						result += stringifyJSON(obj[key]) + ',';
+  					}
+  				}
+  				console.log(result);
+  				result = result.slice(0, -1) + '}';
+  				console.log(result);
+  				return result;	
+  			}
+  			
   		}
   }
 
