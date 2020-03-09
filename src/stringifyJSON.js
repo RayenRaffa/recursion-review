@@ -54,17 +54,20 @@ var stringifyJSON = function(obj) {
   			} else {
   				let result = '{';
   				for (var key in obj) {
-  					result += stringifyJSON(key) + ':';
-  					if (typeof(obj[key]) == 'number') {
-  						result += obj[key] + ',';
-  					} else {
-  						result += stringifyJSON(obj[key]) + ',';
+  					if (typeof(obj[key]) != 'function' && typeof(obj[key]) != 'undefined') {
+  						result += stringifyJSON(key) + ':';
+  						if (typeof(obj[key]) == 'number') {
+  							result += obj[key] + ',';
+  						} else {
+  							result += stringifyJSON(obj[key]) + ',';
+  						}
   					}
   				}
   				console.log(result);
-  				result = result.slice(0, -1) + '}';
-  				console.log(result);
-  				return result;	
+  				if (result.length > 2) {
+  					result = result.slice(0, -1);
+  				}
+  				return result + '}';	
   			}
   			
   		}
